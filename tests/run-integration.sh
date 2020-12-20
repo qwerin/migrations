@@ -95,7 +95,6 @@ tester_run_integration_group()
 	INTEGRATION_GROUP="$1"
 
 	"$PROJECT_DIR/vendor/bin/tester" \
-		-p php \
 		-C \
 		-o console \
 		"$PROJECT_DIR/tests/cases/integration/$INTEGRATION_GROUP"
