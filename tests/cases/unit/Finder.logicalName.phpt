@@ -7,6 +7,7 @@
 namespace NextrasTests\Migrations;
 
 use Mockery;
+use Nextras;
 use Nextras\Migrations\Engine\Finder;
 use Nextras\Migrations\Entities\Group;
 use Tester;

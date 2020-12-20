@@ -6,6 +6,7 @@
 
 namespace NextrasTests\Migrations\Bridges\SymfonyConsole;
 
+use Nextras;
 use Nextras\Migrations\Bridges\SymfonyConsole\CreateCommand;
 use Nextras\Migrations\Configurations\DefaultConfiguration;
 use Mockery;

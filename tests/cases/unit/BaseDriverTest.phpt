@@ -7,6 +7,7 @@
 namespace NextrasTests\Migrations;
 
 use Mockery;
+use Nextras;
 use Tester;
 use Tester\Assert;
 

@@ -6,6 +6,7 @@
 
 namespace NextrasTests\Migrations;
 
+use Nextras;
 use Nextras\Migrations\Engine\OrderResolver;
 use Nextras\Migrations\Engine\Runner;
 use Nextras\Migrations\Entities\Group;
