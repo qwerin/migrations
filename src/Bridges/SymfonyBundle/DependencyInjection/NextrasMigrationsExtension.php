@@ -9,6 +9,7 @@
 
 namespace Nextras\Migrations\Bridges\SymfonyBundle\DependencyInjection;
 
+use Nextras;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
