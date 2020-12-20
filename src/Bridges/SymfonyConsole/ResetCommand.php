@@ -19,6 +19,7 @@ class ResetCommand extends BaseCommand
 	/** @var string */
 	protected static $defaultName = 'migrations:reset';
 
+
 	protected function configure()
 	{
 		$this->setName(self::$defaultName);

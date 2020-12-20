@@ -81,7 +81,7 @@ class HtmlDump implements IPrinter
 
 
 	/**
-	 * @param  string $s     HTML string
+	 * @param  string $s HTML string
 	 * @param  string $class
 	 * @return void
 	 */

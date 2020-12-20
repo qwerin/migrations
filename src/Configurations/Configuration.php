@@ -9,7 +9,6 @@
 
 namespace Nextras\Migrations\Configurations;
 
-use Nette\Utils\Validators;
 use Nextras\Migrations\Entities\Group;
 use Nextras\Migrations\IConfiguration;
 use Nextras\Migrations\IExtensionHandler;
@@ -28,8 +27,8 @@ class Configuration implements IConfiguration
 
 
 	/**
-	 * @param Group[]             $groups
-	 * @param IExtensionHandler[] $extensionHandlers (extension => IExtensionHandler)
+	 * @param  Group[]             $groups
+	 * @param  IExtensionHandler[] $extensionHandlers (extension => IExtensionHandler)
 	 */
 	public function __construct(array $groups, array $extensionHandlers)
 	{

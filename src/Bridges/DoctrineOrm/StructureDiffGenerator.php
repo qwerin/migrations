@@ -27,10 +27,10 @@ class StructureDiffGenerator implements IDiffGenerator
 
 
 	/**
-	 * @param EntityManagerInterface $entityManager
-	 * @param string|NULL   $ignoredQueriesFile
+	 * @param  EntityManagerInterface $entityManager
+	 * @param  string|NULL            $ignoredQueriesFile
 	 */
-	public function __construct(EntityManagerInterface $entityManager, $ignoredQueriesFile = NULL)
+	public function __construct(EntityManagerInterface $entityManager, $ignoredQueriesFile = null)
 	{
 		$this->entityManager = $entityManager;
 		$this->ignoredQueriesFile = $ignoredQueriesFile;
@@ -70,7 +70,7 @@ class StructureDiffGenerator implements IDiffGenerator
 
 		$schemaTool = new SchemaTool($this->entityManager);
 		$metadata = $this->entityManager->getMetadataFactory()->getAllMetadata();
-		$queries = $schemaTool->getUpdateSchemaSql($metadata, TRUE);
+		$queries = $schemaTool->getUpdateSchemaSql($metadata, true);
 
 		return $queries;
 	}
@@ -81,7 +81,7 @@ class StructureDiffGenerator implements IDiffGenerator
 	 */
 	protected function getIgnoredQueries()
 	{
-		if ($this->ignoredQueriesFile === NULL) {
+		if ($this->ignoredQueriesFile === null) {
 			return [];
 		}
 

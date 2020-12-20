@@ -125,7 +125,7 @@ class MySqlDriver extends BaseDriver implements IDriver
 
 	public function getAllMigrations()
 	{
-		$migrations = array();
+		$migrations = [];
 		$result = $this->dbal->query("SELECT * FROM {$this->tableNameQuoted} ORDER BY `executed`");
 		foreach ($result as $row) {
 			if (is_string($row['executed'])) {
@@ -180,7 +180,7 @@ class MySqlDriver extends BaseDriver implements IDriver
 				$this->dbal->escapeString($file->name) . ", " .
 				$this->dbal->escapeString($file->checksum) . ", " .
 				$this->dbal->escapeDateTime(new DateTime('now')) . ", " .
-				$this->dbal->escapeBool(TRUE) .
+				$this->dbal->escapeBool(true) .
 			");\n";
 		}
 		return $out;

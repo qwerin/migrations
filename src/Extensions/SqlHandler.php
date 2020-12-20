@@ -25,7 +25,7 @@ class SqlHandler implements IExtensionHandler
 
 
 	/**
-	 * @param IDriver $driver
+	 * @param  IDriver $driver
 	 */
 	public function __construct(IDriver $driver)
 	{

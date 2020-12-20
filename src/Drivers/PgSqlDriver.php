@@ -31,9 +31,9 @@ class PgSqlDriver extends BaseDriver implements IDriver
 
 
 	/**
-	 * @param IDbal  $dbal
-	 * @param string $tableName
-	 * @param string $schema
+	 * @param  IDbal  $dbal
+	 * @param  string $tableName
+	 * @param  string $schema
 	 */
 	public function __construct(IDbal $dbal, $tableName = 'migrations', $schema = 'public')
 	{
@@ -80,7 +80,7 @@ class PgSqlDriver extends BaseDriver implements IDriver
 			$this->dbal->exec('SELECT pg_advisory_lock(-2099128779216184107)');
 
 		} catch (\Exception $e) {
-			throw new LockException('Unable to acquire a lock.', NULL, $e);
+			throw new LockException('Unable to acquire a lock.', null, $e);
 		}
 	}
 
@@ -91,7 +91,7 @@ class PgSqlDriver extends BaseDriver implements IDriver
 			$this->dbal->exec('SELECT pg_advisory_unlock(-2099128779216184107)');
 
 		} catch (\Exception $e) {
-			throw new LockException('Unable to release a lock.', NULL, $e);
+			throw new LockException('Unable to release a lock.', null, $e);
 		}
 	}
 
@@ -117,7 +117,7 @@ class PgSqlDriver extends BaseDriver implements IDriver
 				$this->dbal->escapeString($migration->filename) . "," .
 				$this->dbal->escapeString($migration->checksum) . "," .
 				$this->dbal->escapeDateTime($migration->executedAt) . "," .
-				$this->dbal->escapeBool(FALSE) .
+				$this->dbal->escapeBool(false) .
 			")
 			RETURNING id
 		");
@@ -138,7 +138,7 @@ class PgSqlDriver extends BaseDriver implements IDriver
 
 	public function getAllMigrations()
 	{
-		$migrations = array();
+		$migrations = [];
 		$result = $this->dbal->query("SELECT * FROM {$this->schemaQuoted}.{$this->tableNameQuoted} ORDER BY \"executed\"");
 		foreach ($result as $row) {
 			if (is_string($row['executed'])) {
@@ -193,7 +193,7 @@ class PgSqlDriver extends BaseDriver implements IDriver
 					$this->dbal->escapeString($file->name) . ", " .
 					$this->dbal->escapeString($file->checksum) . ", " .
 					$this->dbal->escapeDateTime(new DateTime('now')) . ", " .
-					$this->dbal->escapeBool(TRUE) .
+					$this->dbal->escapeBool(true) .
 				");\n";
 		}
 		return $out;

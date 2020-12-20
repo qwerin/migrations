@@ -29,7 +29,7 @@ class DibiAdapter implements IDbal
 	public function query($sql)
 	{
 		$result = $this->conn->nativeQuery($sql);
-		$result->setRowClass(NULL);
+		$result->setRowClass(null);
 		return $result->fetchAll();
 	}
 
