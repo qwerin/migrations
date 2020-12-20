@@ -18,16 +18,16 @@ class NextrasMigrationsExtension extends Extension
 {
 	/** @var array */
 	protected $dbals = [
-		'dibi' => 'Nextras\Migrations\Bridges\Dibi\DibiAdapter',
-		'doctrine' => 'Nextras\Migrations\Bridges\DoctrineDbal\DoctrineAdapter',
-		'nette' => 'Nextras\Migrations\Bridges\NetteDatabase\NetteAdapter',
-		'nextras' => 'Nextras\Migrations\Bridges\NextrasDbal\NextrasAdapter',
+		'dibi' => Nextras\Migrations\Bridges\Dibi\DibiAdapter::class,
+		'doctrine' => Nextras\Migrations\Bridges\DoctrineDbal\DoctrineAdapter::class,
+		'nette' => Nextras\Migrations\Bridges\NetteDatabase\NetteAdapter::class,
+		'nextras' => Nextras\Migrations\Bridges\NextrasDbal\NextrasAdapter::class,
 	];
 
 	/** @var array */
 	protected $drivers = [
-		'mysql' => 'Nextras\Migrations\Drivers\MySqlDriver',
-		'pgsql' => 'Nextras\Migrations\Drivers\PgSqlDriver',
+		'mysql' => Nextras\Migrations\Drivers\MySqlDriver::class,
+		'pgsql' => Nextras\Migrations\Drivers\PgSqlDriver::class,
 	];
 
 
@@ -49,12 +49,12 @@ class NextrasMigrationsExtension extends Extension
 		]);
 
 		$container->addAliases([
-			'Nextras\Migrations\IDbal' => 'nextras_migrations.dbal',
-			'Nextras\Migrations\IDriver' => 'nextras_migrations.driver',
+			Nextras\Migrations\IDbal::class => 'nextras_migrations.dbal',
+			Nextras\Migrations\IDriver::class => 'nextras_migrations.driver',
 		]);
 
 		if ($config['diff_generator'] === 'doctrine') {
-			$structureDiffGeneratorDefinition = new Definition('Nextras\Migrations\Bridges\DoctrineOrm\StructureDiffGenerator');
+			$structureDiffGeneratorDefinition = new Definition(Nextras\Migrations\Bridges\DoctrineOrm\StructureDiffGenerator::class);
 			$structureDiffGeneratorDefinition->setAutowired(TRUE);
 			$structureDiffGeneratorDefinition->setArgument('$ignoredQueriesFile', $config['ignored_queries_file']);
 
@@ -69,19 +69,19 @@ class NextrasMigrationsExtension extends Extension
 			}
 		}
 
-		$configurationDefinition = new Definition('Nextras\Migrations\Configurations\DefaultConfiguration');
+		$configurationDefinition = new Definition(Nextras\Migrations\Configurations\DefaultConfiguration::class);
 		$configurationDefinition->setArguments([$config['dir'], $driverDefinition, $config['with_dummy_data'], $config['php_params']]);
 		$configurationDefinition->addMethodCall('setStructureDiffGenerator', [$structureDiffGeneratorDefinition]);
 
-		$continueCommandDefinition = new Definition('Nextras\Migrations\Bridges\SymfonyConsole\ContinueCommand');
+		$continueCommandDefinition = new Definition(Nextras\Migrations\Bridges\SymfonyConsole\ContinueCommand::class);
 		$continueCommandDefinition->setArguments([$driverDefinition, $configurationDefinition]);
 		$continueCommandDefinition->addTag('console.command');
 
-		$createCommandDefinition = new Definition('Nextras\Migrations\Bridges\SymfonyConsole\CreateCommand');
+		$createCommandDefinition = new Definition(Nextras\Migrations\Bridges\SymfonyConsole\CreateCommand::class);
 		$createCommandDefinition->setArguments([$driverDefinition, $configurationDefinition]);
 		$createCommandDefinition->addTag('console.command');
 
-		$resetCommandDefinition = new Definition('Nextras\Migrations\Bridges\SymfonyConsole\ResetCommand');
+		$resetCommandDefinition = new Definition(Nextras\Migrations\Bridges\SymfonyConsole\ResetCommand::class);
 		$resetCommandDefinition->setArguments([$driverDefinition, $configurationDefinition]);
 		$resetCommandDefinition->addTag('console.command');
 
@@ -93,7 +93,7 @@ class NextrasMigrationsExtension extends Extension
 		]);
 
 		$container->addAliases([
-			'Nextras\Migrations\IConfiguration' => 'nextras_migrations.configuration',
+			Nextras\Migrations\IConfiguration::class => 'nextras_migrations.configuration',
 		]);
 
 		if ($structureDiffGeneratorDefinition) {

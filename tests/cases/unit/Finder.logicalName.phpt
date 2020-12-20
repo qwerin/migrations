@@ -28,7 +28,7 @@ class FinderLogicalNameTest extends Tester\TestCase
 	protected function setUp()
 	{
 		parent::setUp();
-		$this->finder = Mockery::mock('Nextras\Migrations\Engine\Finder')
+		$this->finder = Mockery::mock(Nextras\Migrations\Engine\Finder::class)
 			->shouldAllowMockingProtectedMethods()
 			->shouldDeferMissing()
 			->shouldReceive('getChecksum')

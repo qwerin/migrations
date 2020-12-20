@@ -9,10 +9,13 @@
 
 namespace Nextras\Migrations\Bridges\NetteDI;
 
+use Doctrine;
+use Dibi;
 use Nette;
 use Nette\DI\ContainerBuilder;
 use Nette\Utils\Validators;
 use Nextras;
+use Symfony;
 
 
 class MigrationsExtension extends Nette\DI\CompilerExtension
@@ -37,16 +40,16 @@ class MigrationsExtension extends Nette\DI\CompilerExtension
 
 	/** @var array */
 	protected $dbals = [
-		'dibi' => 'Nextras\Migrations\Bridges\Dibi\DibiAdapter',
-		'doctrine' => 'Nextras\Migrations\Bridges\DoctrineDbal\DoctrineAdapter',
-		'nette' => 'Nextras\Migrations\Bridges\NetteDatabase\NetteAdapter',
-		'nextras' => 'Nextras\Migrations\Bridges\NextrasDbal\NextrasAdapter',
+		'dibi' => Nextras\Migrations\Bridges\Dibi\DibiAdapter::class,
+		'doctrine' => Nextras\Migrations\Bridges\DoctrineDbal\DoctrineAdapter::class,
+		'nette' => Nextras\Migrations\Bridges\NetteDatabase\NetteAdapter::class,
+		'nextras' => Nextras\Migrations\Bridges\NextrasDbal\NextrasAdapter::class,
 	];
 
 	/** @var array */
 	protected $drivers = [
-		'mysql' => 'Nextras\Migrations\Drivers\MySqlDriver',
-		'pgsql' => 'Nextras\Migrations\Drivers\PgSqlDriver',
+		'mysql' => Nextras\Migrations\Drivers\MySqlDriver::class,
+		'pgsql' => Nextras\Migrations\Drivers\PgSqlDriver::class,
 	];
 
 	public function loadConfiguration()
@@ -85,7 +88,7 @@ class MigrationsExtension extends Nette\DI\CompilerExtension
 		$configuration = $this->createConfigurationDefinition();
 
 		// commands
-		if (class_exists('Symfony\Component\Console\Command\Command')) {
+		if (class_exists(Symfony\Component\Console\Command\Command::class)) {
 			$this->createSymfonyCommandDefinitions($driver, $configuration);
 		}
 	}
@@ -97,13 +100,13 @@ class MigrationsExtension extends Nette\DI\CompilerExtension
 		$config = $this->validateConfig($this->defaults);
 
 		// dbal
-		foreach ($builder->findByType('Nextras\Migrations\IDbal') as $def) {
+		foreach ($builder->findByType(Nextras\Migrations\IDbal::class) as $def) {
 			$factory = $def->getFactory();
-			if ($factory->getEntity() !== 'Nextras\Migrations\Bridges\Dibi\DibiAdapter') {
+			if ($factory->getEntity() !== Nextras\Migrations\Bridges\Dibi\DibiAdapter::class) {
 				continue;
 			}
 
-			$conn = $builder->getByType('Dibi\Connection');
+			$conn = $builder->getByType(Dibi\Connection::class);
 			if (!$conn) {
 				continue;
 			}
@@ -113,7 +116,7 @@ class MigrationsExtension extends Nette\DI\CompilerExtension
 
 		// diff generator
 		if ($config['diffGenerator'] === TRUE) {
-			if ($builder->findByType('Doctrine\ORM\EntityManagerInterface') && $builder->hasDefinition($this->prefix('group.structures'))) {
+			if ($builder->findByType(Doctrine\ORM\EntityManagerInterface::class) && $builder->hasDefinition($this->prefix('group.structures'))) {
 				Validators::assertField($config, 'ignoredQueriesFile', 'null|string');
 				$diffGenerator = $this->createDoctrineStructureDiffGeneratorDefinition($config['ignoredQueriesFile']);
 				$builder->getDefinition($this->prefix('group.structures'))
@@ -149,7 +152,7 @@ class MigrationsExtension extends Nette\DI\CompilerExtension
 		if ($factory) {
 			return $this->getContainerBuilder()
 				->addDefinition($this->prefix('dbal'))
-				->setType('Nextras\Migrations\IDbal')
+				->setType(Nextras\Migrations\IDbal::class)
 				->setFactory($factory);
 
 		} elseif ($dbal === NULL) {
@@ -182,7 +185,7 @@ class MigrationsExtension extends Nette\DI\CompilerExtension
 		if ($factory) {
 			return $this->getContainerBuilder()
 				->addDefinition($this->prefix('driver'))
-				->setType('Nextras\Migrations\IDriver')
+				->setType(Nextras\Migrations\IDriver::class)
 				->setFactory($factory);
 
 		} elseif ($driver === NULL) {
@@ -265,7 +268,7 @@ class MigrationsExtension extends Nette\DI\CompilerExtension
 			$groupDefinitions[] = $builder->addDefinition($this->prefix("group.$serviceName"))
 				->addTag(self::TAG_GROUP, ['for' => [$this->name]])
 				->setAutowired(FALSE)
-				->setType('Nextras\Migrations\Entities\Group')
+				->setType(Nextras\Migrations\Entities\Group::class)
 				->addSetup('$name', [$groupName])
 				->addSetup('$enabled', [$enabled])
 				->addSetup('$directory', [$directory])
@@ -284,12 +287,12 @@ class MigrationsExtension extends Nette\DI\CompilerExtension
 		$sqlHandler = $builder->addDefinition($this->prefix('extensionHandler.sql'))
 			->addTag(self::TAG_EXTENSION_HANDLER, ['for' => [$this->name], 'extension' => 'sql'])
 			->setAutowired(FALSE)
-			->setType('Nextras\Migrations\Extensions\SqlHandler')
+			->setType(Nextras\Migrations\Extensions\SqlHandler::class)
 			->setArguments([$driver]);
 
 		$phpHandler = $builder->addDefinition($this->prefix('extensionHandler.php'))
 			->addTag(self::TAG_EXTENSION_HANDLER, ['for' => [$this->name], 'extension' => 'php'])
-			->setType('Nextras\Migrations\Extensions\PhpHandler')
+			->setType(Nextras\Migrations\Extensions\PhpHandler::class)
 			->setAutowired(FALSE)
 			->setArguments([$phpParams]);
 
@@ -301,8 +304,8 @@ class MigrationsExtension extends Nette\DI\CompilerExtension
 	{
 		return $this->getContainerBuilder()
 			->addDefinition($this->prefix('configuration'))
-			->setType('Nextras\Migrations\IConfiguration')
-			->setFactory('Nextras\Migrations\Configurations\Configuration');
+			->setType(Nextras\Migrations\IConfiguration::class)
+			->setFactory(Nextras\Migrations\Configurations\Configuration::class);
 	}
 
 
@@ -312,8 +315,8 @@ class MigrationsExtension extends Nette\DI\CompilerExtension
 
 		return $builder->addDefinition($this->prefix('diffGenerator.structures'))
 			->setAutowired(FALSE)
-			->setType('Nextras\Migrations\IDiffGenerator')
-			->setFactory('Nextras\Migrations\Bridges\DoctrineOrm\StructureDiffGenerator')
+			->setType(Nextras\Migrations\IDiffGenerator::class)
+			->setFactory(Nextras\Migrations\Bridges\DoctrineOrm\StructureDiffGenerator::class)
 			->setArguments(['@Doctrine\ORM\EntityManagerInterface', $ignoredQueriesFile]);
 	}
 
@@ -321,20 +324,20 @@ class MigrationsExtension extends Nette\DI\CompilerExtension
 	private function createSymfonyCommandDefinitions($driver, $configuration)
 	{
 		$builder = $this->getContainerBuilder();
-		$builder->addExcludedClasses(['Nextras\Migrations\Bridges\SymfonyConsole\BaseCommand']);
+		$builder->addExcludedClasses([Nextras\Migrations\Bridges\SymfonyConsole\BaseCommand::class]);
 
 		$builder->addDefinition($this->prefix('continueCommand'))
-			->setType('Nextras\Migrations\Bridges\SymfonyConsole\ContinueCommand')
+			->setType(Nextras\Migrations\Bridges\SymfonyConsole\ContinueCommand::class)
 			->setArguments([$driver, $configuration])
 			->addTag('kdyby.console.command');
 
 		$builder->addDefinition($this->prefix('createCommand'))
-			->setType('Nextras\Migrations\Bridges\SymfonyConsole\CreateCommand')
+			->setType(Nextras\Migrations\Bridges\SymfonyConsole\CreateCommand::class)
 			->setArguments([$driver, $configuration])
 			->addTag('kdyby.console.command');
 
 		$builder->addDefinition($this->prefix('resetCommand'))
-			->setType('Nextras\Migrations\Bridges\SymfonyConsole\ResetCommand')
+			->setType(Nextras\Migrations\Bridges\SymfonyConsole\ResetCommand::class)
 			->setArguments([$driver, $configuration])
 			->addTag('kdyby.console.command');
 	}
@@ -342,10 +345,10 @@ class MigrationsExtension extends Nette\DI\CompilerExtension
 
 	private function filterArguments(array $arguments)
 	{
-		if (method_exists('Nette\DI\Helpers', 'filterArguments')) {
+		if (method_exists(Nette\DI\Helpers::class, 'filterArguments')) {
 			return Nette\DI\Helpers::filterArguments($arguments);
 
-		} elseif (method_exists('Nette\DI\Compiler', 'filterArguments')) {
+		} elseif (method_exists(Nette\DI\Compiler::class, 'filterArguments')) {
 			return Nette\DI\Compiler::filterArguments($arguments);
 
 		} else {

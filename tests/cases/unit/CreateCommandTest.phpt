@@ -19,7 +19,7 @@ class CreateCommandTest extends Tester\TestCase
 {
 	public function testTypeArgDescription()
 	{
-		$driver = Mockery::mock('Nextras\Migrations\IDriver');
+		$driver = Mockery::mock(Nextras\Migrations\IDriver::class);
 		$config = new DefaultConfiguration('migrations', $driver);
 
 		$command = new CreateCommand($driver, $config);
