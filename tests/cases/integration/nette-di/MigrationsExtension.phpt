@@ -7,6 +7,8 @@
 namespace NextrasTests\Migrations;
 
 use Nette;
+use Nextras;
+use Symfony;
 use Tester\Assert;
 use Tester\Environment;
 use Tester\TestCase;
