@@ -150,7 +150,7 @@ class MigrationsExtension extends Nette\DI\CompilerExtension
 		if ($factory) {
 			return $this->getContainerBuilder()
 				->addDefinition($this->prefix('dbal'))
-				->setClass('Nextras\Migrations\IDbal')
+				->setType('Nextras\Migrations\IDbal')
 				->setFactory($factory);
 
 		} elseif ($dbal === NULL) {
@@ -183,7 +183,7 @@ class MigrationsExtension extends Nette\DI\CompilerExtension
 		if ($factory) {
 			return $this->getContainerBuilder()
 				->addDefinition($this->prefix('driver'))
-				->setClass('Nextras\Migrations\IDriver')
+				->setType('Nextras\Migrations\IDriver')
 				->setFactory($factory);
 
 		} elseif ($driver === NULL) {
@@ -266,7 +266,7 @@ class MigrationsExtension extends Nette\DI\CompilerExtension
 			$groupDefinitions[] = $builder->addDefinition($this->prefix("group.$serviceName"))
 				->addTag(self::TAG_GROUP, ['for' => [$this->name]])
 				->setAutowired(FALSE)
-				->setClass('Nextras\Migrations\Entities\Group')
+				->setType('Nextras\Migrations\Entities\Group')
 				->addSetup('$name', [$groupName])
 				->addSetup('$enabled', [$enabled])
 				->addSetup('$directory', [$directory])
@@ -285,12 +285,12 @@ class MigrationsExtension extends Nette\DI\CompilerExtension
 		$sqlHandler = $builder->addDefinition($this->prefix('extensionHandler.sql'))
 			->addTag(self::TAG_EXTENSION_HANDLER, ['for' => [$this->name], 'extension' => 'sql'])
 			->setAutowired(FALSE)
-			->setClass('Nextras\Migrations\Extensions\SqlHandler')
+			->setType('Nextras\Migrations\Extensions\SqlHandler')
 			->setArguments([$driver]);
 
 		$phpHandler = $builder->addDefinition($this->prefix('extensionHandler.php'))
 			->addTag(self::TAG_EXTENSION_HANDLER, ['for' => [$this->name], 'extension' => 'php'])
-			->setClass('Nextras\Migrations\Extensions\PhpHandler')
+			->setType('Nextras\Migrations\Extensions\PhpHandler')
 			->setAutowired(FALSE)
 			->setArguments([$phpParams]);
 
@@ -302,7 +302,7 @@ class MigrationsExtension extends Nette\DI\CompilerExtension
 	{
 		return $this->getContainerBuilder()
 			->addDefinition($this->prefix('configuration'))
-			->setClass('Nextras\Migrations\IConfiguration')
+			->setType('Nextras\Migrations\IConfiguration')
 			->setFactory('Nextras\Migrations\Configurations\Configuration');
 	}
 
@@ -313,7 +313,7 @@ class MigrationsExtension extends Nette\DI\CompilerExtension
 
 		return $builder->addDefinition($this->prefix('diffGenerator.structures'))
 			->setAutowired(FALSE)
-			->setClass('Nextras\Migrations\IDiffGenerator')
+			->setType('Nextras\Migrations\IDiffGenerator')
 			->setFactory('Nextras\Migrations\Bridges\DoctrineOrm\StructureDiffGenerator')
 			->setArguments(['@Doctrine\ORM\EntityManagerInterface', $ignoredQueriesFile]);
 	}
@@ -325,17 +325,17 @@ class MigrationsExtension extends Nette\DI\CompilerExtension
 		$builder->addExcludedClasses(['Nextras\Migrations\Bridges\SymfonyConsole\BaseCommand']);
 
 		$builder->addDefinition($this->prefix('continueCommand'))
-			->setClass('Nextras\Migrations\Bridges\SymfonyConsole\ContinueCommand')
+			->setType('Nextras\Migrations\Bridges\SymfonyConsole\ContinueCommand')
 			->setArguments([$driver, $configuration])
 			->addTag('kdyby.console.command');
 
 		$builder->addDefinition($this->prefix('createCommand'))
-			->setClass('Nextras\Migrations\Bridges\SymfonyConsole\CreateCommand')
+			->setType('Nextras\Migrations\Bridges\SymfonyConsole\CreateCommand')
 			->setArguments([$driver, $configuration])
 			->addTag('kdyby.console.command');
 
 		$builder->addDefinition($this->prefix('resetCommand'))
-			->setClass('Nextras\Migrations\Bridges\SymfonyConsole\ResetCommand')
+			->setType('Nextras\Migrations\Bridges\SymfonyConsole\ResetCommand')
 			->setArguments([$driver, $configuration])
 			->addTag('kdyby.console.command');
 	}
